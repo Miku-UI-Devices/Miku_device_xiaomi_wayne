@@ -98,6 +98,10 @@ TARGET_KERNEL_CONFIG := vendor/wayne_defconfig
 TARGET_KERNEL_VERSION := 4.19
 TARGET_WITH_KERNEL_SU := true
 
+# OTA package
+TARGET_OTA_ALLOW_NON_AB := true
+AB_OTA_UPDATER := false
+
 # Platform
 BOARD_VENDOR := xiaomi
 OVERRIDE_QCOM_HARDWARE_VARIANT := sdm660
