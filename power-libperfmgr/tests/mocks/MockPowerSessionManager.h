@@ -16,10 +16,10 @@
 
 #pragma once
 
-#include <aidl/AdpfTypes.h>
-#include <aidl/AppDescriptorTrace.h>
-#include <aidl/AppHintDesc.h>
-#include <aidl/PhysicalQuantityTypes.h>
+#include <AdpfTypes.h>
+#include <AppDescriptorTrace.h>
+#include <AppHintDesc.h>
+#include <PhysicalQuantityTypes.h>
 #include <gmock/gmock.h>
 
 namespace aidl::google::hardware::power::mock::pixel {
