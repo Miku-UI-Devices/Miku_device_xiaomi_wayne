@@ -1,26 +1,58 @@
 cc_binary {
     name: "android.hardware.power-service.wayne-libperfmgr",
+    defaults: [
+        "android.hardware.power-ndk_shared",
+        "power_libperfmgr_defaults",
+    ],
     relative_install_path: "hw",
     init_rc: ["android.hardware.power-service.wayne-libperfmgr.rc"],
     vintf_fragments: ["android.hardware.power-service.wayne.xml"],
     vendor: true,
+    cflags: [
+        "-Wno-unused-variable",
+        "-Wno-unused-parameter",
+        "-Wthread-safety",
+    ],
     shared_libs: [
-        "android.hardware.power-V3-ndk",
         "libbase",
-        "libcutils",
-        "liblog",
-        "libutils",
         "libbinder_ndk",
+        "libcutils",
+        "libdl",
+        "liblog",
         "libperfmgr",
         "libprocessgroup",
+        "libutils",
         "pixel-power-ext-V1-ndk",
+        "android.hardware.common.fmq-V1-ndk",
+        "libfmq",
+    ],
+    static_libs: [
+        "libgmock",
+        "libgtest",
     ],
     srcs: [
+        "BackgroundWorker.cpp",
+        "GpuCalculationHelpers.cpp",
+        "GpuCapacityNode.cpp",
         "service.cpp",
         "InteractionHandler.cpp",
         "Power.cpp",
         "PowerExt.cpp",
         "PowerHintSession.cpp",
         "PowerSessionManager.cpp",
+        "UClampVoter.cpp",
+        "SessionRecords.cpp",
+        "SessionTaskMap.cpp",
+        "SessionValueEntry.cpp",
+    ],
+    cpp_std: "gnu++20",
+}
+
+cc_library_static {
+    name: "libperfmgr-ext",
+    defaults: ["android.hardware.power-ndk_shared"],
+    vendor: true,
+    srcs: [
+        "PowerModeExtension.cpp",
     ],
 }

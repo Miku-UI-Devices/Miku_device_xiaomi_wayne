@@ -5,7 +5,11 @@ service vendor.power-hal-aidl /vendor/bin/hw/android.hardware.power-service.wayn
     priority -20
 
 on late-fs
-     start vendor.power-hal-aidl
+    start vendor.power-hal-aidl
+
+# Unblock thermalHAL under off mode charge
+on charger
+    start vendor.power-hal-aidl
 
 # Restart powerHAL when framework died
 on property:init.svc.zygote=restarting && property:vendor.powerhal.state=*
@@ -30,6 +34,3 @@ on property:ro.debuggable=1 && property:vendor.powerhal.config.debug=*
 on property:persist.vendor.powerhal.config.debug=*
     setprop vendor.powerhal.config.debug ${persist.vendor.powerhal.config.debug}
 
-# initialize powerHAL when boot is completed
-on property:sys.boot_completed=1
-    setprop vendor.powerhal.init 1

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2020 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-#pragma once
-
-#include <atomic>
-#include <memory>
-#include <thread>
-
-#include <aidl/google/hardware/power/extension/pixel/BnPowerExt.h>
-#include <perfmgr/HintManager.h>
+#include <aidl/android/hardware/power/BnPower.h>
 
 namespace aidl {
 namespace google {
@@ -30,16 +23,19 @@ namespace power {
 namespace impl {
 namespace pixel {
 
-class PowerExt : public ::aidl::google::hardware::power::extension::pixel::BnPowerExt {
-  public:
-    PowerExt() {}
-    ndk::ScopedAStatus setMode(const std::string &mode, bool enabled) override;
-    ndk::ScopedAStatus isModeSupported(const std::string &mode, bool *_aidl_return) override;
-    ndk::ScopedAStatus setBoost(const std::string &boost, int32_t durationMs) override;
-    ndk::ScopedAStatus isBoostSupported(const std::string &boost, bool *_aidl_return) override;
+using ::aidl::android::hardware::power::Mode;
 
-  private:
-};
+bool isDeviceSpecificModeSupported(Mode type, bool* _aidl_return) {
+    (void) type;
+    (void) _aidl_return;
+    return false;
+}
+
+bool setDeviceSpecificMode(Mode type, bool enabled) {
+    (void) type;
+    (void) enabled;
+    return false;
+}
 
 }  // namespace pixel
 }  // namespace impl

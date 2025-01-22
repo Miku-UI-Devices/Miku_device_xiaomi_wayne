@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 #pragma once
 
-#include <atomic>
-#include <memory>
-#include <thread>
+#include <aidl/android/hardware/power/WorkDuration.h>
 
-#include <aidl/google/hardware/power/extension/pixel/BnPowerExt.h>
-#include <perfmgr/HintManager.h>
+#include <chrono>
+
+#include "PhysicalQuantityTypes.h"
+
+using aidl::android::hardware::power::WorkDuration;
 
 namespace aidl {
 namespace google {
@@ -30,16 +31,16 @@ namespace power {
 namespace impl {
 namespace pixel {
 
-class PowerExt : public ::aidl::google::hardware::power::extension::pixel::BnPowerExt {
-  public:
-    PowerExt() {}
-    ndk::ScopedAStatus setMode(const std::string &mode, bool enabled) override;
-    ndk::ScopedAStatus isModeSupported(const std::string &mode, bool *_aidl_return) override;
-    ndk::ScopedAStatus setBoost(const std::string &boost, int32_t durationMs) override;
-    ndk::ScopedAStatus isBoostSupported(const std::string &boost, bool *_aidl_return) override;
+inline double gpu_time_attribution(std::chrono::nanoseconds total, std::chrono::nanoseconds gpu) {
+    using std::literals::chrono_literals::operator""ns;
+    if (total == 0ns) {
+        return 0.0;
+    }
+    return std::chrono::duration_cast<std::chrono::duration<double, std::nano>>(gpu) / total;
+}
 
-  private:
-};
+Cycles calculate_capacity(WorkDuration observation, std::chrono::nanoseconds target,
+                          Frequency gpu_frequency);
 
 }  // namespace pixel
 }  // namespace impl

@@ -31,13 +31,13 @@
 
 using aidl::google::hardware::power::impl::pixel::Power;
 using aidl::google::hardware::power::impl::pixel::PowerExt;
-using aidl::google::hardware::power::impl::pixel::PowerHintMonitor;
-using aidl::google::hardware::power::impl::pixel::PowerSessionManager;
 using ::android::perfmgr::HintManager;
 
 constexpr std::string_view kPowerHalInitProp("vendor.powerhal.init");
 
 int main() {
+    android::base::SetDefaultTag(LOG_TAG);
+    android::base::SetMinimumLogSeverity(android::base::INFO);
     // Parse config but do not start the looper
     HintManager *hm = HintManager::GetInstance();
     if (!hm) {
@@ -63,11 +63,7 @@ int main() {
     const std::string instance = std::string() + Power::descriptor + "/default";
     binder_status_t status = AServiceManager_addService(pw->asBinder().get(), instance.c_str());
     CHECK(status == STATUS_OK);
-    LOG(INFO) << "Pixel Power HAL AIDL Service with Extension is started.";
-
-    if (HintManager::GetInstance()->GetAdpfProfile()) {
-        PowerHintMonitor::getInstance()->start();
-    }
+    LOG(INFO) << "Lineage Power HAL AIDL Service with Extension is started.";
 
     std::thread initThread([&]() {
         ::android::base::WaitForProperty(kPowerHalInitProp.data(), "1");
@@ -78,6 +74,6 @@ int main() {
     ABinderProcess_joinThreadPool();
 
     // should not reach
-    LOG(ERROR) << "Pixel Power HAL AIDL Service with Extension just died.";
+    LOG(ERROR) << "Lineage Power HAL AIDL Service with Extension just died.";
     return EXIT_FAILURE;
 }
